@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using ToDoApp.Services;
-using ToDoAppGpt;
 
 namespace ToDoAppGpt
 {
@@ -10,9 +9,7 @@ namespace ToDoAppGpt
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-
             builder.Services.AddSingleton<TodoService>();
-
             await builder.Build().RunAsync();
         }
     }
