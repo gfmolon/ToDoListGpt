@@ -1,0 +1,56 @@
+@page "/todolist"
+@using ToDoApp.Models
+@using ToDoApp.Services
+@inject TodoService TodoService
+
+<h3>Lista de Tarefas</h3>
+
+<input @bind="newItemTitle" placeholder="Nova Tarefa" />
+<button @onclick="AddItem">Adicionar</button>
+
+<ul>
+    @foreach (var item in TodoService.GetItems())
+    {
+        <li>
+            <input type="checkbox" @bind="item.IsCompleted" @onclick="() => ToggleItem(item.Id)" />
+            @if (item.IsCompleted)
+            {
+                <s>@item.Title</s>
+            }
+            else
+            {
+                @item.Title
+            }
+            <button @onclick="() => RemoveItem(item.Id)">Remover</button>
+        </li>
+    }
+</ul>
+
+@code {
+    private string newItemTitle = string.Empty;
+
+    private void AddItem()
+    {
+        if (!string.IsNullOrWhiteSpace(newItemTitle))
+        {
+            var newItem = new TodoItem
+                {
+                    Id = new Random().Next(1, 1000),
+                    Title = newItemTitle,
+                    IsCompleted = false
+                };
+            TodoService.AddItem(newItem);
+            newItemTitle = string.Empty;
+        }
+    }
+
+    private void RemoveItem(int id)
+    {
+        TodoService.RemoveItem(id);
+    }
+
+    private void ToggleItem(int id)
+    {
+        TodoService.ToggleItem(id);
+    }
+}
